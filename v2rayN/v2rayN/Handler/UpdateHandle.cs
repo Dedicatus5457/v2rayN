@@ -55,7 +55,7 @@ namespace v2rayN.Handler
                                 StartInfo = new ProcessStartInfo
                                 {
                                     FileName = "v2rayUpgrade.exe",
-                                    Arguments = "\"" + fileName + "\"",
+                                    Arguments = $"\"{fileName}\"",
                                     WorkingDirectory = Utils.StartupPath()
                                 }
                             };
@@ -455,6 +455,17 @@ namespace v2rayN.Handler
                         }
                     default:
                         throw new ArgumentException("Type");
+                }
+
+                if (type == ECoreType.v2rayN)
+                {
+                    decimal.TryParse(curVersion, out decimal decCur);
+                    decimal.TryParse(version, out decimal dec);
+                    if (decCur >= dec)
+                    {
+                        AbsoluteCompleted?.Invoke(this, new ResultEventArgs(false, message));
+                        return;
+                    }
                 }
 
                 if (curVersion == version)
